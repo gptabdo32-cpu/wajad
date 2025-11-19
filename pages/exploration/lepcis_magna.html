@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لبدة الكبرى - جوهرة المتوسط</title>
+    <link rel="stylesheet" href="/styles/output.css">
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <!-- شريط التنقل (Navbar) -->
+    <nav class="bg-blue-900 shadow-lg">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold text-white hover:text-yellow-400 transition duration-300">منصة الخمس السياحية</a>
+            <div class="flex space-x-4 space-x-reverse">
+                <a href="/" class="text-white hover:text-yellow-400 transition duration-300">الرئيسية</a>
+                <a href="/pages/accommodation/hotels.html" class="text-white hover:text-yellow-400 transition duration-300">الإقامة</a>
+                <a href="/pages/dining/restaurants.html" class="text-white hover:text-yellow-400 transition duration-300">المطاعم</a>
+                <a href="/pages/profile/dashboard.html" class="text-white hover:text-yellow-400 transition duration-300">حسابي</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-6">
+        
+        <!-- قسم البطل (Hero Section) -->
+        <header class="relative bg-cover bg-center h-96 rounded-xl shadow-xl mb-12" style="background-image: url('https://via.placeholder.com/1200x400?text=Lepcis+Magna+Image');">
+            <div class="absolute inset-0 bg-black opacity-50 rounded-xl"></div>
+            <div class="relative flex items-center justify-center h-full">
+                <div class="text-center text-white p-4">
+                    <h1 class="text-5xl font-extrabold mb-3 border-b-4 border-yellow-500 pb-2 inline-block">لبدة الكبرى (Lepcis Magna)</h1>
+                    <p class="text-xl font-light">جوهرة المتوسط: موقع أثري عالمي وتاريخ لا ينسى</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- المحتوى الرئيسي -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- العمود الأيمن (المعلومات) -->
+            <div class="lg:col-span-2 bg-white p-8 rounded-xl shadow-lg">
+                <h2 class="text-3xl font-bold text-gray-800 mb-6 border-r-4 border-blue-500 pr-3">نظرة عامة وتاريخ</h2>
+                <p class="text-gray-600 mb-6 leading-relaxed">
+                    لبدة الكبرى هي إحدى أهم المدن الرومانية القديمة في شمال أفريقيا، وتقع على الساحل الليبي. تشتهر بآثارها المحفوظة جيدًا والتي تعكس عظمة الإمبراطورية الرومانية، خاصة في عهد الإمبراطور سيبتيموس سيفيروس الذي ولد فيها.
+                </p>
+                
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4 border-b pb-2">المعالم الرئيسية</h3>
+                <ul class="list-disc list-inside space-y-2 text-gray-600 pr-4">
+                    <li class="hover:text-blue-500 transition duration-200">قوس النصر لسيبتيموس سيفيروس</li>
+                    <li class="hover:text-blue-500 transition duration-200">المسرح الروماني المطل على البحر</li>
+                    <li class="hover:text-blue-500 transition duration-200">الحمامات الكبرى</li>
+                    <li class="hover:text-blue-500 transition duration-200">السوق القديم (Forum)</li>
+                </ul>
+
+                <!-- زر توليد مسار رحلة آلي -->
+                <div class="mt-8 text-center">
+                    <button class="bg-yellow-500 hover:bg-yellow-600 text-blue-900 font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 text-lg">
+                        توليد مسار رحلة آلي إلى لبدة الكبرى
+                    </button>
+                </div>
+            </div>
+
+            <!-- العمود الأيسر (الخريطة والخدمات) -->
+            <div class="lg:col-span-1 space-y-8">
+                
+                <!-- خريطة الموقع (GIS) -->
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-4 border-r-4 border-yellow-500 pr-3">الموقع الجغرافي (GIS)</h3>
+                    <div class="h-64 bg-gray-200 flex items-center justify-center rounded-lg border-2 border-dashed border-gray-400">
+                        <p class="text-gray-500">خريطة تفاعلية للموقع</p>
+                    </div>
+                </div>
+
+                <!-- الخدمات القريبة -->
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-4 border-r-4 border-yellow-500 pr-3">خدمات قريبة</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center text-gray-700">
+                            <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">مرشد معتمد</span>
+                            <span class="mr-2">أحمد المصراتي</span>
+                        </li>
+                        <li class="flex items-center text-gray-700">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">مطعم</span>
+                            <span class="mr-2">مطعم لبدة البحري</span>
+                        </li>
+                        <li class="flex items-center text-gray-700">
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full">فندق</span>
+                            <span class="mr-2">فندق الخمس الكبير</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- التذييل (Footer) -->
+    <footer class="bg-gray-800 text-white text-center p-6 mt-12">
+        <p class="text-sm">&copy; 2025 منصة الخمس السياحية. جميع الحقوق محفوظة.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,146 @@
+.poi-card {
+  background: var(--white);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.poi-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px);
+}
+
+.poi-image-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background: var(--light-gray);
+}
+
+.poi-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.poi-card:hover .poi-image {
+  transform: scale(1.1);
+}
+
+.verified-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: var(--success);
+  color: var(--white);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+  animation: slideInRight var(--transition-normal);
+}
+
+.category-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: var(--primary-main);
+  color: var(--white);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+  animation: slideInLeft var(--transition-normal);
+}
+
+.poi-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.poi-content h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--primary-dark);
+  font-size: 1.3rem;
+}
+
+.poi-description {
+  color: var(--dark-gray);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.poi-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+}
+
+.rating,
+.distance {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.poi-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.poi-actions button {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+}
+
+.poi-details {
+  background-color: var(--light-gray);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  border-right: 4px solid var(--primary-main);
+}
+
+.poi-details p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  color: var(--dark-gray);
+}
+
+.poi-details strong {
+  color: var(--primary-dark);
+}
+
+@media (max-width: 480px) {
+  .poi-card {
+    border-radius: 8px;
+  }
+
+  .poi-content {
+    padding: 1rem;
+  }
+
+  .poi-actions {
+    flex-direction: column;
+  }
+
+  .poi-actions button {
+    width: 100%;
+  }
+}

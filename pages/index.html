@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الخمس السياحية - Siyaha Al-Khums</title>
+    
+    <!-- Leaflet CSS للخرائط التفاعلية -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    
+    <!-- CSS الخاص بالمشروع -->
+    <link rel="stylesheet" href="/styles/main.css">
+    <link rel="stylesheet" href="/styles/map.css">
+    <link rel="stylesheet" href="/styles/auth.css">
+</head>
+<body>
+    <!-- شريط التنقل (Navigation Bar) -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <h1>🗺️ الخمس السياحية</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">الرئيسية</a></li>
+                <li><a href="#map" class="nav-link">الخريطة</a></li>
+                <li><a href="#about" class="nav-link">عن المنصة</a></li>
+                <li><a href="#contact" class="nav-link">اتصل بنا</a></li>
+                <li id="auth-nav-item">
+                    <button id="auth-toggle-btn" class="btn-auth">تسجيل الدخول</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- الصفحة الرئيسية (Hero Section) -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h2>اكتشف جمال الخمس</h2>
+            <p>منصة سياحية متكاملة توفر لك أفضل التجارب السياحية في مدينة الخمس الليبية</p>
+            <button class="btn-primary" id="explore-btn">ابدأ الاستكشاف</button>
+        </div>
+    </section>
+
+    <!-- قسم الخريطة التفاعلية -->
+    <section id="map" class="map-section">
+        <h2>استكشف المواقع</h2>
+        <div id="map-container" class="map-container">
+            <div id="leaflet-map" class="leaflet-map"></div>
+        </div>
+        
+        <!-- قائمة الفئات (Categories Filter) -->
+        <div class="categories-filter">
+            <h3>تصفية حسب الفئة:</h3>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="all">الكل</button>
+                <button class="filter-btn" data-category="archaeological">مواقع أثرية</button>
+                <button class="filter-btn" data-category="natural">مواقع طبيعية</button>
+                <button class="filter-btn" data-category="restaurant">مطاعم</button>
+                <button class="filter-btn" data-category="hotel">فنادق</button>
+                <button class="filter-btn" data-category="cafe">مقاهي</button>
+            </div>
+        </div>
+
+        <!-- قائمة نقاط الاهتمام (POIs List) -->
+        <div class="pois-list">
+            <h3>نقاط الاهتمام</h3>
+            <div id="pois-container" class="pois-container">
+                <!-- سيتم ملء هذا الجزء بواسطة JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم المصادقة (Authentication Modal) -->
+    <div id="auth-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            
+            <!-- نموذج تسجيل الدخول -->
+            <div id="login-form-container" class="form-container active">
+                <h2>تسجيل الدخول</h2>
+                <form id="login-form">
+                    <input type="email" id="login-email" placeholder="البريد الإلكتروني" required>
+                    <input type="password" id="login-password" placeholder="كلمة المرور" required>
+                    <button type="submit" class="btn-primary">دخول</button>
+                </form>
+                <p>ليس لديك حساب؟ <a href="#" class="toggle-form" data-form="register">إنشاء حساب</a></p>
+            </div>
+
+            <!-- نموذج التسجيل -->
+            <div id="register-form-container" class="form-container hidden">
+                <h2>إنشاء حساب جديد</h2>
+                <form id="register-form">
+                    <input type="text" id="register-username" placeholder="اسم المستخدم" required>
+                    <input type="email" id="register-email" placeholder="البريد الإلكتروني" required>
+                    <input type="password" id="register-password" placeholder="كلمة المرور" required>
+                    <input type="password" id="register-password-confirm" placeholder="تأكيد كلمة المرور" required>
+                    <button type="submit" class="btn-primary">تسجيل</button>
+                </form>
+                <p>لديك حساب بالفعل؟ <a href="#" class="toggle-form" data-form="login">تسجيل الدخول</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم عن المنصة -->
+    <section id="about" class="about">
+        <h2>عن منصة الخمس السياحية</h2>
+        <p>منصة متكاملة تهدف إلى تعريف السياح بأجمل المواقع السياحية في مدينة الخمس الليبية، مع توفير معلومات شاملة عن المطاعم والفنادق والمواقع الأثرية والطبيعية.</p>
+    </section>
+
+    <!-- قسم الاتصال -->
+    <section id="contact" class="contact">
+        <h2>اتصل بنا</h2>
+        <p>البريد الإلكتروني: info@siyaha-alkhums.ly</p>
+        <p>الهاتف: +218 (0) 65 123 4567</p>
+    </section>
+
+    <!-- تذييل الصفحة (Footer) -->
+    <footer class="footer">
+        <p>&copy; 2025 منصة الخمس السياحية. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <!-- Leaflet JS للخرائط التفاعلية -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    
+    <!-- JavaScript الخاص بالمشروع -->
+    <script src="/scripts/config.js"></script>
+    <script src="/scripts/api.js"></script>
+    <script src="/scripts/map.js"></script>
+    <script src="/scripts/auth.js"></script>
+    <script src="/scripts/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+// server.js
+const express = require('express');
+const path = require('path');
+const config = require('./config/config');
+const supabase = require('./config/supabase');
+
+/// 2. إعداد تطبيق Express
+const app = express();
+
+// 1. إعداد عميل Supabase
+// يمكن استخدام هذا العميل في المسارات ووحدات التحكم للوصول إلى Supabase
+app.set('supabase', supabase);
+
+// 3. إعداد Middlewares الأساسية
+app.use(express.json()); // لتحليل طلبات JSON
+app.use(express.urlencoded({ extended: true })); // لتحليل طلبات URL-encoded
+
+// 4. إعداد المسارات (Routes)
+const authRoutes = require('./routes/auth');
+const poiRoutes = require('./routes/poi');
+// const itineraryRoutes = require('./routes/itinerary'); // إضافة مسارات مسار الرحلة (غير موجود حاليًا)
+const bookingRoutes = require('./routes/booking'); // إضافة مسارات الحجز
+const paymentRoutes = require('./routes/payment'); // إضافة مسارات الدفع
+
+// مسار اختبار أساسي للتحقق من عمل الخادم
+app.get('/api/v1/status', (req, res) => {
+    res.status(200).json({
+        status: 'ok',
+        message: 'Siyaha Al-Khums API is running smoothly.',
+        environment: config.server.env,
+        port: config.server.port
+    });
+});
+
+// ربط مسارات المصادقة
+app.use('/api/v1/auth', authRoutes);
+
+// ربط مسارات نقاط الاهتمام (POI)
+app.use('/api/v1/poi', poiRoutes);
+
+// ربط مسارات مسار الرحلة (Itinerary)
+// app.use('/api/v1/itinerary', itineraryRoutes);
+
+// ربط مسارات الحجز (Bookings)
+app.use('/api/v1/bookings', bookingRoutes);
+
+// ربط مسارات الدفع (Payments)
+app.use('/api/v1/payments', paymentRoutes);
+
+// 5. تقديم الملفات الثابتة (الواجهة الأمامية)
+// يجب أن تكون الملفات الثابتة في مجلد 'public' أو ما شابه، لكن سنستخدم الهيكلة الحالية
+app.use(express.static(path.join(__dirname, 'pages')));
+app.use('/styles', express.static(path.join(__dirname, 'styles')));
+app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
+
+// توجيه الصفحة الرئيسية
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// 6. تشغيل الخادم
+const PORT = config.server.port;
+app.listen(PORT, () => {
+    console.log(`Server running in ${config.server.env} mode on port ${PORT}`);
+    console.log(`Access the application at http://localhost:${PORT}`);
+});

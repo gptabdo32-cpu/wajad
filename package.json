@@ -1,0 +1,38 @@
+{
+  "name": "siyaha-alkhums",
+  "version": "1.0.0",
+  "description": "منصة سياحة الخمس - Full Stack Architectural Implementation",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "tourism",
+    "libya",
+    "fullstack"
+  ],
+  "author": "gptabdo32-cpu",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gptabdo32-cpu/siyaha-alkhums.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gptabdo32-cpu/siyaha-alkhums/issues"
+  },
+  "homepage": "https://github.com/gptabdo32-cpu/siyaha-alkhums#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.42.5",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.22",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17"
+  }
+}
