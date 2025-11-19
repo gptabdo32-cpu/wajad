@@ -1,20 +1,16 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
 /* ============================================
    Global Styles & Color Scheme
    ============================================ */
 
 :root {
   /* Primary Colors - Mediterranean Blue */
-  --primary-dark: #1a3a52;
+  --primary-dark: #1a4d6d;
   --primary-main: #2c7a9e;
   --primary-light: #4a9fb5;
   
-  /* Secondary Colors - Orange */
-  --secondary-light: #e8944a;
-  --secondary-main: #d67a1f;
+  /* Secondary Colors - Golden/Tan */
+  --secondary-light: #d4a574;
+  --secondary-main: #c49060;
   
   /* Neutral Colors */
   --white: #ffffff;
@@ -54,7 +50,7 @@ html {
 }
 
 body {
-  font-family: 'Almarai', 'Droid Arabic Naskh', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--white);
   color: var(--dark-gray);
   line-height: 1.6;
