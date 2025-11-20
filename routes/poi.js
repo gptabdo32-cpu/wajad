@@ -6,6 +6,7 @@ const {
   createPoi,
   searchPois,
   getAccommodation, // إضافة المسار الجديد
+  getDining, // إضافة مسار المطاعم
 } = require("../controllers/poiController");
 const { protect, authorize } = require("../middleware/auth");
 const validationMiddleware = require('../middleware/validationMiddleware');
@@ -18,6 +19,7 @@ router.route("/all").get(getAllPois); // المسار الجديد لجلب ال
 router.route("/search").get(searchPois);
 router.route("/radius/:distance/:lat/:lng").get(getPoisInRadius);
 router.route("/accommodation").get(getAccommodation); // المسار الجديد لجلب الإقامة
+router.route("/dining").get(getDining); // المسار الجديد لجلب المطاعم
 
 // المسارات الخاصة (تتطلب مصادقة)
 router
