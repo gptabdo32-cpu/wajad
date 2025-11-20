@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stars, Text } from '@react-three/drei';
 import { motion } from 'framer-motion-3d';
 import * as THREE from 'three';
+import { convertTo3D, getCenterPosition } from '../utils/gisUtils';
 
 // 1. مكون يمثل نقطة اهتمام (POI) ثلاثية الأبعاد
 const POI3D = ({ position, name, category, onClick, index }) => {
@@ -69,26 +70,8 @@ const POI3D = ({ position, name, category, onClick, index }) => {
 
 // 2. المكون الرئيسي للخريطة ثلاثية الأبعاد
 const Map3D = ({ pois, onPOISelect }) => {
-  // تحويل الإحداثيات الجغرافية (خطوط الطول والعرض) إلى إحداثيات 3D
-  // نستخدم تحويلاً بسيطًا هنا: خط الطول = X، خط العرض = Z، الارتفاع = Y
-  const convertTo3D = (lat, lon) => {
-    // يجب أن تكون الإحداثيات في نطاق معقول للعرض
-    // نطاق الخمس تقريبيًا: Lat 32.6, Lon 14.2
-    const scaleFactor = 10;
-    const offsetX = -14.28 * scaleFactor;
-    const offsetZ = -32.64 * scaleFactor;
-    
-    const x = lon * scaleFactor + offsetX;
-    const z = lat * scaleFactor + offsetZ;
-    
-    // ارتفاع عشوائي بسيط لتمييز النقاط
-    const y = 0.5; 
-    
-    return [x, y, z];
-  };
-
   // إحداثيات مركز الخمس التقريبية
-  const centerPosition = convertTo3D(32.6375, 14.2917);
+  const centerPosition = getCenterPosition();
 
   return (
     <Canvas
