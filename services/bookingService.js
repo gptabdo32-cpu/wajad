@@ -57,21 +57,33 @@ exports.updateBookingStatus = async (bookingId, newStatus) => {
 };
 
 /**
- * جلب حجوزات المستخدم
+ * جلب حجوزات المستخدم مع دعم الترحيل (Pagination)
  * @param {string} userId - معرف المستخدم
+ * @param {number} limit - الحد الأقصى لعدد الحجوزات المراد جلبها
+ * @param {number} offset - الإزاحة (لتخطي عدد معين من الحجوزات)
  * @returns {Object} قائمة الحجوزات أو خطأ
  */
-exports.getUserBookings = async (userId) => {
+exports.getUserBookings = async (userId, limit = 10, offset = 0) => {
     try {
-        const { data, error } = await supabase
+        // جلب الحجوزات المحدودة
+        const { data: bookings, error: bookingsError } = await supabase
             .from('bookings')
             .select('*')
             .eq('user_id', userId)
-            .order('booking_date', { ascending: false });
+            .order('booking_date', { ascending: false })
+            .range(offset, offset + limit - 1); // Supabase range is inclusive
 
-        if (error) throw error;
+        if (bookingsError) throw bookingsError;
 
-        return { bookings: data };
+        // جلب العدد الإجمالي للحجوزات (لأغراض الترحيل)
+        const { count, error: countError } = await supabase
+            .from('bookings')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', userId);
+
+        if (countError) throw countError;
+
+        return { bookings: bookings, totalCount: count };
     } catch (error) {
         return { error: error.message };
     }

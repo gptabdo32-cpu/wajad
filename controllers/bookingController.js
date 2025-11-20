@@ -35,15 +35,24 @@ exports.createBooking = async (req, res) => {
  */
 exports.getUserBookings = async (req, res) => {
     const userId = req.userId; 
+    // جلب معلمات الترحيل من الاستعلام (Query Parameters)
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = parseInt(req.query.offset) || 0;
 
     try {
-        const result = await bookingService.getUserBookings(userId);
+        const result = await bookingService.getUserBookings(userId, limit, offset);
 
         if (result.error) {
             return res.status(404).json({ success: false, msg: 'فشل جلب الحجوزات', error: result.error });
         }
 
-        res.status(200).json({ success: true, count: result.bookings.length, data: result.bookings });
+        res.status(200).json({ 
+            success: true, 
+            count: result.totalCount, 
+            limit: limit,
+            offset: offset,
+            data: result.bookings 
+        });
     } catch (error) {
         res.status(500).json({ success: false, msg: 'حدث خطأ في الخادم.' });
     }

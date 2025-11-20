@@ -34,6 +34,7 @@ const itineraryRoutes = require('./routes/itinerary'); // إضافة مسارا�
 const bookingRoutes = require('./routes/booking'); // إضافة مسارات الحجز
 const myCredRoutes = require('./routes/mycred'); // إضافة مسارات نقاط الولاء
 const paymentRoutes = require('./routes/payment'); // إضافة مسارات الدفع
+const profileRoutes = require('./routes/profile'); // إضافة مسارات الملف الشخصي التجميعية
 
 // مسار اختبار أساسي للتحقق من عمل الخادم
 app.get('/api/v1/status', (req, res) => {
@@ -62,6 +63,9 @@ app.use('/api/v1/payments', paymentRoutes);
 
 // ربط مسارات نقاط الولاء (MyCred)
 app.use('/api/v1/mycred', myCredRoutes);
+
+// ربط مسارات الملف الشخصي التجميعية (Profile)
+app.use('/api/v1/profile', profileRoutes);
 
 // 5. وسيط معالجة الأخطاء (يجب أن يكون بعد جميع المسارات)
 app.use(errorHandler);
