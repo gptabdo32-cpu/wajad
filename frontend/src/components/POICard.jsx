@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import './POICard.css';
 
-const POICard = ({ poi, onNavigate }) => {
+const POICard = ({ poi, onNavigate, index }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
@@ -16,8 +17,33 @@ const POICard = ({ poi, onNavigate }) => {
     setImageLoaded(true);
   };
 
+  // متغيرات Framer Motion
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: index * 0.1, // تأثير الظهور المتتابع
+        duration: 0.4,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const hoverEffect = {
+    scale: 1.03,
+    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)",
+  };
+
   return (
-    <div className="poi-card scale-in hover-lift">
+    <motion.div
+      className="poi-card hover-lift"
+      variants={cardVariants}
+      initial="hidden"
+      animate="visible"
+      whileHover={hoverEffect}
+    >
       <div className="poi-image-container">
         {!imageLoaded && <div className="poi-image lazy-image"></div>}
         {imageLoaded && (
@@ -32,7 +58,12 @@ const POICard = ({ poi, onNavigate }) => {
         <span className="category-badge">{poi.category}</span>
       </div>
 
-      <div className="poi-content">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: index * 0.1 + 0.3 }}
+        className="poi-content"
+      >
         <h3>{poi.name}</h3>
         <p className="poi-description">{poi.description}</p>
 
@@ -57,17 +88,22 @@ const POICard = ({ poi, onNavigate }) => {
         </div>
 
         {showDetails && (
-          <div className="poi-details fade-in">
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="poi-details"
+          >
             <p><strong>العنوان:</strong> {poi.address}</p>
             <p><strong>الهاتف:</strong> {poi.phone || 'غير متوفر'}</p>
             <p><strong>ساعات العمل:</strong> {poi.hours || 'غير متوفر'}</p>
             {poi.licenseNumber && (
               <p><strong>رقم الترخيص:</strong> {poi.licenseNumber}</p>
             )}
-          </div>
+          </motion.div>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

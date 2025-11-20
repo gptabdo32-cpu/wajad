@@ -150,11 +150,12 @@ const HomePage = () => {
           <h2>أماكن الاهتمام</h2>
           {filteredPOIs.length > 0 ? (
             <div className="poi-grid">
-              {filteredPOIs.map((poi) => (
+              {filteredPOIs.map((poi, index) => (
                 <POICard
                   key={poi.id}
                   poi={poi}
                   onNavigate={handleNavigate}
+                  index={index} // تمرير الـ index لتأثير الظهور المتتابع
                 />
               ))}
             </div>

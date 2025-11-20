@@ -9,10 +9,7 @@
   height: 100%;
 }
 
-.poi-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-8px);
-}
+/* تأثيرات التمرير تم نقلها إلى Framer Motion */
 
 .poi-image-container {
   position: relative;
@@ -29,9 +26,7 @@
   transition: transform var(--transition-normal);
 }
 
-.poi-card:hover .poi-image {
-  transform: scale(1.1);
-}
+/* تأثيرات التمرير على الصورة تم نقلها إلى Framer Motion */
 
 .verified-badge {
   position: absolute;
