@@ -8,6 +8,7 @@ const {
   getAccommodation, // إضافة المسار الجديد
   getDining, // إضافة مسار المطاعم
   getTransport, // إضافة مسار النقل
+  getEmergencyPois, // إضافة مسار الطوارئ
 } = require("../controllers/poiController");
 const { protect, authorize } = require("../middleware/auth");
 const validationMiddleware = require('../middleware/validationMiddleware');
@@ -22,6 +23,7 @@ router.route("/radius/:distance/:lat/:lng").get(getPoisInRadius);
 router.route("/accommodation").get(getAccommodation); // المسار الجديد لجلب الإقامة
 router.route("/dining").get(getDining); // المسار الجديد لجلب المطاعم
 router.route("/transport").get(getTransport); // المسار الجديد لجلب النقل
+router.route("/emergency").get(getEmergencyPois); // المسار الجديد لجلب الطوارئ
 
 // المسارات الخاصة (تتطلب مصادقة)
 router

@@ -1,0 +1,133 @@
+/* wajad/frontend/src/styles/SafetyPage.css */
+
+.safety-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f4f7f6;
+}
+
+.safety-header {
+    text-align: center;
+    padding: 30px 0;
+    background-color: #fff;
+    border-bottom: 3px solid #dc3545; /* لون أحمر للطوارئ */
+}
+
+.safety-header h1 {
+    color: #dc3545;
+    font-size: 3rem;
+    margin-bottom: 5px;
+}
+
+.safety-header .subtitle {
+    color: #555;
+    font-size: 1.2rem;
+}
+
+.safety-content {
+    max-width: 1200px;
+    margin: 30px auto;
+    width: 100%;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* خريطة على اليسار ومعلومات على اليمين */
+    gap: 30px;
+}
+
+/* قسم معلومات الطوارئ */
+.emergency-info {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.emergency-info h2 {
+    color: #dc3545;
+    border-bottom: 2px solid #f8d7da;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.emergency-numbers-list {
+    list-style: none;
+    padding: 0;
+}
+
+.emergency-numbers-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.emergency-numbers-list li:last-child {
+    border-bottom: none;
+}
+
+.emergency-numbers-list .service {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.emergency-numbers-list .number {
+    color: #007bff;
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.emergency-numbers-list .number:hover {
+    color: #0056b3;
+}
+
+/* قسم نصائح الأمان */
+.safety-tips {
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.safety-tips h2 {
+    color: #28a745; /* لون أخضر للأمان */
+    border-bottom: 2px solid #d4edda;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.tip-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-left: 5px solid #28a745;
+    border-radius: 5px;
+}
+
+.tip-item h4 {
+    margin-top: 0;
+    color: #333;
+}
+
+/* قسم الخريطة */
+.emergency-map-container {
+    height: 400px;
+    background-color: #e9ecef;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* استجابة الشاشات الصغيرة */
+@media (max-width: 992px) {
+    .safety-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .emergency-map-container {
+        order: -1; /* وضع الخريطة في الأعلى على الجوال */
+    }
+}

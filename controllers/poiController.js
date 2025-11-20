@@ -189,3 +189,42 @@ exports.getTransport = async (req, res, next) => {
         next(new ErrorResponse('حدث خطأ غير متوقع أثناء جلب عروض النقل.', 500));
     }
 };
+
+
+// @desc    جلب نقاط الاهتمام للطوارئ (مستشفيات، شرطة، إلخ)
+// @route   GET /api/v1/poi/emergency
+// @access  عام
+exports.getEmergencyPois = async (req, res, next) => {
+    try {
+        // يمكن استخدام الموقع الحالي للمستخدم (lat, lng) لتصفية النتائج
+        const { lat, lng, radius = 10 } = req.query; // نصف قطر افتراضي 10 كم
+
+        let queryBuilder = supabase
+            .from('pois')
+            .select('*')
+            .eq('category', 'Emergency'); // يفترض وجود فئة 'Emergency'
+
+        // إذا تم توفير الموقع، يمكن استخدام gisService.getPoisInRadius
+        if (lat && lng) {
+            // سنستخدم دالة gisService.getPoisInRadius الموجودة
+            const result = await gisService.getPoisInRadius(parseFloat(radius), parseFloat(lat), parseFloat(lng), 'Emergency');
+            
+            if (result.success) {
+                return res.status(200).json(result);
+            } else {
+                return next(new ErrorResponse(result.error || 'خطأ في خدمة GIS لجلب الطوارئ', 500));
+            }
+        }
+
+        // إذا لم يتم توفير الموقع، جلب جميع نقاط الطوارئ
+        const { data: emergencyPois, error } = await queryBuilder;
+
+        if (error) {
+            return next(new ErrorResponse('فشل في جلب نقاط الاهتمام للطوارئ.', 500));
+        }
+
+        res.status(200).json({ success: true, count: emergencyPois.length, data: emergencyPois });
+    } catch (error) {
+        next(new ErrorResponse('حدث خطأ غير متوقع أثناء جلب نقاط الاهتمام للطوارئ.', 500));
+    }
+};
