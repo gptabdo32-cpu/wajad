@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true })); // لتحليل طلبات URL-
 // 4. إعداد المسارات (Routes)
 const authRoutes = require('./routes/auth');
 const poiRoutes = require('./routes/poi');
-// const itineraryRoutes = require('./routes/itinerary'); // إضافة مسارات مسار الرحلة (غير موجود حاليًا)
+const itineraryRoutes = require('./routes/itinerary'); // إضافة مسارات مسار الرحلة
 const bookingRoutes = require('./routes/booking'); // إضافة مسارات الحجز
 const paymentRoutes = require('./routes/payment'); // إضافة مسارات الدفع
 
@@ -39,7 +39,7 @@ app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/poi', poiRoutes);
 
 // ربط مسارات مسار الرحلة (Itinerary)
-// app.use('/api/v1/itinerary', itineraryRoutes);
+app.use('/api/v1/itinerary', itineraryRoutes);
 
 // ربط مسارات الحجز (Bookings)
 app.use('/api/v1/bookings', bookingRoutes);
@@ -48,15 +48,9 @@ app.use('/api/v1/bookings', bookingRoutes);
 app.use('/api/v1/payments', paymentRoutes);
 
 // 5. تقديم الملفات الثابتة (الواجهة الأمامية)
-// يجب أن تكون الملفات الثابتة في مجلد 'public' أو ما شابه، لكن سنستخدم الهيكلة الحالية
-app.use(express.static(path.join(__dirname, 'pages')));
-app.use('/styles', express.static(path.join(__dirname, 'styles')));
-app.use('/scripts', express.static(path.join(__dirname, 'scripts')));
-
-// توجيه الصفحة الرئيسية
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
+// بما أننا نستخدم React/Vite، فإن الخادم الخلفي لا يقدم الواجهة الأمامية بشكل مباشر.
+// يجب أن يتم تقديم الواجهة الأمامية عبر خادم Vite للتطوير أو عبر خادم ثابت للإنتاج.
+// تم حذف المسارات القديمة التي كانت تشير إلى ملفات HTML/CSS/JS في جذر المشروع.
 
 // 6. تشغيل الخادم
 const PORT = config.server.port;

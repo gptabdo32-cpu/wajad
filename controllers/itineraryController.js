@@ -1,6 +1,6 @@
 // siyaha-alkhums/controllers/itineraryController.js
-const POI = require("../models/POI"); // Assuming a POI model exists
-const User = require("../models/User"); // Assuming a User model exists
+const supabaseClient = require('../utils/supabaseClient');
+const db = supabaseClient.db; // Assuming db is the Supabase client instance
 
 /**
  * Helper function to calculate the distance between two coordinates (Haversine formula)
@@ -132,11 +132,11 @@ function generateItinerary(pois, preferences) {
 }
 
 /**
- * @route POST /api/itinerary/generate
+ * @route POST /api/v1/itinerary/generate
  * @desc Generate a personalized itinerary
- * @access Public (or Private, depending on auth setup)
+ * @access Private
  */
-exports.generatePersonalizedItinerary = async (req, res) => {
+exports.generateItinerary = async (req, res) => {
     try {
         // In a real application, you would get user preferences from the request body
         // and potentially from the authenticated user's profile (User model).
@@ -154,17 +154,21 @@ exports.generatePersonalizedItinerary = async (req, res) => {
 
         // 1. Fetch all POIs from the database
         // In a real scenario, you might use geo-spatial queries here for better performance
-        // The query below is a placeholder for a MongoDB GeoJSON query
-        const pois = await POI.find({
-            "location.coordinates": {
-                $geoWithin: {
-                    $centerSphere: [
-                        [startLon, startLat],
-                        50 / 6371 // 50 km radius in radians
-                    ]
-                }
-            }
-        }).lean();
+        // 1. Fetch all POIs from the database using a PostGIS query
+        // ST_DWithin: checks if two geometries are within a given distance (in meters)
+        const { data: pois, error } = await db
+            .from('pois')
+            .select('*')
+            .rpc('st_dwithin', {
+                geom1: `POINT(${startLon} ${startLat})`,
+                geom2: 'location',
+                distance_meters: 50000 // 50 km
+            });
+
+        if (error) {
+            console.error("Supabase POI Fetch Error:", error);
+            return res.status(500).json({ msg: "Database error fetching POIs." });
+        }
 
         if (!pois || pois.length === 0) {
             return res.status(404).json({ msg: "No Points of Interest found nearby." });
@@ -189,35 +193,23 @@ exports.generatePersonalizedItinerary = async (req, res) => {
     }
 };
 
-// --- Mock Data and Model for Demonstration ---
-// Since I don't have access to the actual MongoDB, I'll create a mock POI object
-// to allow the controller logic to be written and tested conceptually.
-// This mock should be removed once the actual POI model is available.
+/**
+ * @route GET /api/v1/itinerary/:id
+ * @desc Get a specific itinerary by ID
+ * @access Private
+ */
+exports.getItinerary = async (req, res) => {
+    // This function would typically fetch a saved itinerary from a database table (e.g., 'itineraries')
+    // Since no 'itineraries' table was defined in the schema, we'll return a placeholder.
+    res.status(501).json({ msg: "Itinerary retrieval not yet implemented. Requires 'itineraries' table." });
+};
 
-// Mock POI Data (Coordinates are [Longitude, Latitude] for GeoJSON)
-const mockPOIs = [
-    { _id: "poi1", name: "لبدة الكبرى", category: "Archaeological", rating: 4.8, openTime: 9, closeTime: 17, location: { type: "Point", coordinates: [14.2917, 32.6375] } },
-    { _id: "poi2", name: "شاطئ الخمس", category: "Nature", rating: 4.5, openTime: 0, closeTime: 24, location: { type: "Point", coordinates: [14.2700, 32.6500] } }, // Always open
-    { _id: "poi3", name: "مطعم المأكولات البحرية", category: "Food", rating: 4.2, openTime: 12, closeTime: 22, location: { type: "Point", coordinates: [14.2800, 32.6400] } },
-    { _id: "poi4", name: "متحف الخمس", category: "Archaeological", rating: 4.0, openTime: 9, closeTime: 16, location: { type: "Point", coordinates: [14.3000, 32.6300] } },
-    { _id: "poi5", name: "مقهى الواحة", category: "Food", rating: 3.9, openTime: 8, closeTime: 23, location: { type: "Point", coordinates: [14.2850, 32.6450] } },
-];
-
-// Mock POI Model
-if (typeof POI === 'undefined' || POI === null) {
-    console.warn("POI Model not found. Creating a mock POI model for testing.");
-    POI = {
-        find: async (query) => {
-            // Mock geo-spatial query: just return all mock POIs for simplicity
-            // In a real scenario, the query would filter based on the $geoWithin
-            return mockPOIs;
-        },
-        // Add a .lean() method to the mock to prevent errors
-        lean: () => POI
-    };
-}
-
-// Mock User Model (if needed, currently not used in the controller)
-if (typeof User === 'undefined' || User === null) {
-    User = {};
-}
+/**
+ * @route DELETE /api/v1/itinerary/:id
+ * @desc Delete a specific itinerary by ID
+ * @access Private
+ */
+exports.deleteItinerary = async (req, res) => {
+    // This function would typically delete a saved itinerary from a database table
+    res.status(501).json({ msg: "Itinerary deletion not yet implemented. Requires 'itineraries' table." });
+};
