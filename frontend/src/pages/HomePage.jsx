@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import POICard from '../components/POICard';
@@ -82,37 +83,78 @@ const HomePage = () => {
     navigate('/map', { state: { selectedPOI: poi } });
   };
 
+  // متغيرات Framer Motion
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 },
+  };
+
   return (
-    <div className="home-page">
+    <motion.div
+      className="home-page"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       <Header />
 
       {/* Hero Section */}
-      <section className="hero fade-in">
+      <motion.section
+        className="hero"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.6 }}
+      >
         <div className="hero-content">
-          <h1>أهلاً وسهلاً في سياحة الخمس</h1>
-          <p>اكتشف جمال الخمس: تراث عريق وطبيعة خلابة وضيافة دافئة</p>
-          <button className="btn btn-secondary" onClick={() => navigate('/map')}>
+          <motion.h1 variants={itemVariants}>أهلاً وسهلاً في سياحة الخمس</motion.h1>
+          <motion.p variants={itemVariants}>اكتشف جمال الخمس: تراث عريق وطبيعة خلابة وضيافة دافئة</motion.p>
+          <motion.button
+            className="btn btn-secondary"
+            onClick={() => navigate('/map')}
+            variants={itemVariants}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             استكشف الخريطة
-          </button>
+          </motion.button>
         </div>
-      </section>
+      </motion.section>
 
       {/* Quick Access Section */}
       <section className="quick-access">
         <div className="container">
           <h2>الوصول السريع</h2>
-          <div className="quick-access-grid">
-            {quickAccessItems.map((item) => (
-              <button
+          <motion.div
+            className="quick-access-grid"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {quickAccessItems.map((item, index) => (
+              <motion.button
                 key={item.path}
-                className="quick-access-btn hover-scale"
+                className="quick-access-btn"
                 onClick={() => navigate(item.path)}
+                variants={itemVariants}
+                whileHover={{ scale: 1.05, boxShadow: "0 5px 15px rgba(0, 0, 0, 0.1)" }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ delay: index * 0.1 }}
               >
                 <span className="icon">{item.icon}</span>
                 <span className="label">{item.label}</span>
-              </button>
+              </motion.button>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -168,7 +210,12 @@ const HomePage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="footer">
+      <motion.footer
+        className="footer"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+      >
         <div className="container">
           <p>&copy; 2024 منصة سياحة الخمس. جميع الحقوق محفوظة.</p>
           <div className="footer-links">
@@ -177,8 +224,8 @@ const HomePage = () => {
             <a href="#privacy">سياسة الخصوصية</a>
           </div>
         </div>
-      </footer>
-    </div>
+      </motion.footer>
+    </motion.div>
   );
 };
 
