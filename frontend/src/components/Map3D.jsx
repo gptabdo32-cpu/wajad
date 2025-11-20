@@ -6,19 +6,25 @@ import * as THREE from 'three';
 import { convertTo3D, getCenterPosition } from '../utils/gisUtils';
 
 // 1. مكون يمثل نقطة اهتمام (POI) ثلاثية الأبعاد
-const POI3D = ({ position, name, category, onClick, index }) => {
+cconst POIModel = ({ position, name, category, onClick, index }) => { {
   const meshRef = useRef();
+  const modelRef = useRef();
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
 
   // تأثير النبض عند التحويم
   useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.scale.y = THREE.MathUtils.lerp(
-        meshRef.current.scale.y,
+    // تأثير النبض عند التحويم
+    if (modelRef.current) {
+       modelRef.current.scale.y = THREE.MathUtils.lerp(
+        modelRef.current.scale.y,
         hovered ? 1.5 : 1,
         0.1
-      );
+      );;
+    }
+    // دوران خفيف للموديل
+    if (modelRef.current) {
+        modelRef.current.rotation.y += 0.005;
     }
   });
 
@@ -33,9 +39,24 @@ const POI3D = ({ position, name, category, onClick, index }) => {
     }
   };
 
+  // تحديد الشكل الهندسي بناءً على الفئة
+  const getGeometry = (cat) => {
+    switch (cat) {
+      case 'Archaeological': return <boxGeometry args={[0.5, 1, 0.5]} />; // مبنى
+      case 'Nature': return <coneGeometry args={[0.5, 1.5, 32]} />; // شجرة/جبل
+      case 'Food': return <sphereGeometry args={[0.5, 32, 32]} />; // دائرة/طبق
+      case 'Accommodation': return <cylinderGeometry args={[0.5, 0.5, 1.5, 32]} />; // برج/فندق
+      default: re      <mesh>
+        {getGeometry(category)}
+        <meshStandardMaterial color={getColor(category)} emissive={hovered ? getColor(category) : 'black'} emissiveIntensity={hovered ? 0.5 : 0} />
+      </mesh>
+    }
+  };
+
   return (
-    <motion.mesh
-      ref={meshRef}
+    <motion.group
+                                                                                                                                                                                                                                                                                                                                                                                              ref={modelModel:
+<ctrl42>call:default_api:shell{action:}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}
       position={position}
       onClick={(e) => {
         e.stopPropagation();
@@ -49,13 +70,15 @@ const POI3D = ({ position, name, category, onClick, index }) => {
       animate={{ y: position[1], opacity: 1 }}
       transition={{ type: 'spring', stiffness: 100, delay: index * 0.1 }}
     >
-      <boxGeometry args={[0.5, 1, 0.5]} />
-      <meshStandardMaterial color={getColor(category)} emissive={hovered ? getColor(category) : 'black'} emissiveIntensity={hovered ? 0.5 : 0} />
+      <mesh>
+        {getGeometry(category)}
+        <meshStandardMaterial color={getColor(category)} emissive={hovered ? getColor(category) : 'black'} emissiveIntensity={hovered ? 0.5 : 0} />
+      </mesh>
       
       {/* اسم النقطة يظهر عند النقر */}
       {clicked && (
         <Text
-          position={[0, 1.5, 0]}
+          position={[0, 2.0, 0]} // رفع النص قليلاً ليتناسب مع الأشكال الجديدة
           fontSize={0.3}
           color="white"
           anchorX="center"
@@ -64,7 +87,7 @@ const POI3D = ({ position, name, category, onClick, index }) => {
           {name}
         </Text>
       )}
-    </motion.mesh>
+    </motion.group>
   );
 };
 
@@ -95,8 +118,7 @@ const Map3D = ({ pois, onPOISelect }) => {
       </mesh>
 
       {/* نقاط الاهتمام */}
-      {pois.map((poi, index) => (
-        <POI3D
+      {pois.map((poi, index) =>         <POIModelodelodel
           key={poi.id}
           position={convertTo3D(poi.latitude, poi.longitude)}
           name={poi.name}
