@@ -1,0 +1,135 @@
+/* wajad/frontend/src/components/LoyaltyCard.css */
+
+.loyalty-card {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #ecf0f1;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    min-height: 200px;
+}
+
+/* خلفية زخرفية */
+.loyalty-card::before {
+    content: '★';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    font-size: 150px;
+    color: rgba(255, 255, 255, 0.05);
+    z-index: 0;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    position: relative;
+    z-index: 1;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.card-level {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* ألوان المستويات */
+.loyalty-card.برونزي .card-level {
+    background-color: #cd7f32;
+}
+
+.loyalty-card.فضي {
+    background: linear-gradient(135deg, #7f8c8d, #95a5a6);
+}
+.loyalty-card.فضي .card-level {
+    background-color: #bdc3c7;
+    color: #34495e;
+}
+
+.loyalty-card.ذهبي {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+.loyalty-card.ذهبي .card-level {
+    background-color: #f1c40f;
+    color: #34495e;
+}
+
+.card-body {
+    text-align: center;
+    margin-top: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.card-username {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    opacity: 0.8;
+}
+
+.points-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.points-value {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1;
+    color: #3498db; /* لون مميز للنقاط */
+    text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+}
+
+.loyalty-card.ذهبي .points-value {
+    color: #f1c40f;
+    text-shadow: 0 0 10px rgba(241, 196, 15, 0.8);
+}
+
+.points-label {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.card-footer {
+    position: relative;
+    z-index: 1;
+}
+
+.progress-bar-container {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    height: 8px;
+    margin-bottom: 5px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #3498db;
+    border-radius: 10px;
+}
+
+.loyalty-card.ذهبي .progress-bar {
+    background-color: #f1c40f;
+}
+
+.next-level-info {
+    font-size: 0.85rem;
+    opacity: 0.7;
+    text-align: center;
+}

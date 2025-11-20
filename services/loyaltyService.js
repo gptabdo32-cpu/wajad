@@ -54,6 +54,27 @@ exports.getTotalPoints = async (userId) => {
 };
 
 /**
+ * جلب سجل نقاط الولاء للمستخدم
+ * @param {string} userId - معرف المستخدم
+ * @returns {Object} سجل النقاط أو خطأ
+ */
+exports.getLoyaltyHistory = async (userId) => {
+    try {
+        const { data, error } = await supabase
+            .from('loyalty_points')
+            .select('*')
+            .eq('user_id', userId)
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        return { success: true, history: data };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+};
+
+/**
  * @desc دالة مساعدة لربطها بخدمة الدفع لتمنح نقاط عند تأكيد الحجز
  * @param {string} userId - معرف المستخدم
  * @param {string} bookingId - معرف الحجز

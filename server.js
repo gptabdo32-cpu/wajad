@@ -32,6 +32,7 @@ const authRoutes = require('./routes/auth');
 const poiRoutes = require('./routes/poi');
 const itineraryRoutes = require('./routes/itinerary'); // إضافة مسارات مسار الرحلة
 const bookingRoutes = require('./routes/booking'); // إضافة مسارات الحجز
+const myCredRoutes = require('./routes/mycred'); // إضافة مسارات نقاط الولاء
 const paymentRoutes = require('./routes/payment'); // إضافة مسارات الدفع
 
 // مسار اختبار أساسي للتحقق من عمل الخادم
@@ -58,6 +59,9 @@ app.use('/api/v1/bookings', bookingRoutes);
 
 // ربط مسارات الدفع (Payments)
 app.use('/api/v1/payments', paymentRoutes);
+
+// ربط مسارات نقاط الولاء (MyCred)
+app.use('/api/v1/mycred', myCredRoutes);
 
 // 5. وسيط معالجة الأخطاء (يجب أن يكون بعد جميع المسارات)
 app.use(errorHandler);
