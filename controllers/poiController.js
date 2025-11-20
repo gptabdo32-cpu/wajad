@@ -154,3 +154,38 @@ exports.getDining = async (req, res, next) => {
         next(new ErrorResponse('حدث خطأ غير متوقع أثناء جلب عروض المطاعم.', 500));
     }
 };
+
+
+// @desc    جلب عروض النقل مع التصفية المتقدمة
+// @route   GET /api/v1/poi/transport
+// @access  عام
+exports.getTransport = async (req, res, next) => {
+    try {
+        const { type, capacity, maxPrice } = req.query;
+
+        let queryBuilder = supabase
+            .from('pois')
+            .select('*')
+            .eq('category', 'Transport');
+
+        if (type) {
+            queryBuilder = queryBuilder.eq('transport_type', type); // يفترض وجود عمود transport_type
+        }
+        if (capacity) {
+            queryBuilder = queryBuilder.gte('capacity', capacity); // يفترض وجود عمود capacity
+        }
+        if (maxPrice) {
+            queryBuilder = queryBuilder.lte('price_per_day', maxPrice); // يفترض وجود عمود price_per_day
+        }
+
+        const { data: transport, error } = await queryBuilder;
+
+        if (error) {
+            return next(new ErrorResponse('فشل في جلب عروض النقل.', 500));
+        }
+
+        res.status(200).json({ success: true, count: transport.length, data: transport });
+    } catch (error) {
+        next(new ErrorResponse('حدث خطأ غير متوقع أثناء جلب عروض النقل.', 500));
+    }
+};
