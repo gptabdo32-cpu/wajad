@@ -1,5 +1,6 @@
 // controllers/authController.js
 const authService = require('../services/authService');
+const { registerSchema } = require('../validation/authValidation');
 
 // @desc    تسجيل مستخدم جديد
 // @route   POST /api/v1/auth/register
@@ -8,8 +9,10 @@ exports.register = async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
 
-        if (!email || !password || !username) {
-            return res.status(400).json({ success: false, error: 'الرجاء إدخال جميع الحقول المطلوبة (البريد الإلكتروني، كلمة المرور، اسم المستخدم).' });
+        // التحقق من صحة البيانات باستخدام Joi
+        const { error } = registerSchema.validate(req.body);
+        if (error) {
+            return res.status(400).json({ success: false, error: error.details[0].message });
         }
 
         const result = await authService.signUp(email, password, username);
