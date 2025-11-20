@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense, lazy } from 'react';
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
-import Map3D from '../components/Map3D';
 import './MapViewPage.css';
+
+// تحميل Map3D بشكل كسول (Lazy Loading)
+const LazyMap3D = lazy(() => import('../components/Map3D'));
 
 const MapViewPage = () => {
   const [selectedPOI, setSelectedPOI] = useState(null);
@@ -96,7 +98,9 @@ const MapViewPage = () => {
             استكشف جميع أماكن الاهتمام في الخمس على الخريطة التفاعلية
           </p>
 
-          <Map3D pois={mockPOIs} onPOISelect={handleMarkerClick} />
+          <Suspense fallback={<div className="loading-map-placeholder">جاري تحميل الخريطة ثلاثية الأبعاد...</div>}>
+            <LazyMap3D pois={mockPOIs} onPOISelect={handleMarkerClick} />
+          </Suspense>
 
           {selectedPOI && (
             <motion.div
