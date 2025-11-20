@@ -1,5 +1,6 @@
 // server.js
 const express = require('express');
+const helmet = require('helmet');
 const path = require('path');
 const config = require('./config/config');
 const supabase = require('./config/supabase');
@@ -12,6 +13,7 @@ const app = express();
 app.set('supabase', supabase);
 
 // 3. إعداد Middlewares الأساسية
+app.use(helmet()); // إضافة رؤوس أمان HTTP
 app.use(express.json()); // لتحليل طلبات JSON
 app.use(express.urlencoded({ extended: true })); // لتحليل طلبات URL-encoded
 
