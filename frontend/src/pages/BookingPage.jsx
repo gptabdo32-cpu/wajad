@@ -1,1 +1,197 @@
-// frontend/src/pages/BookingPage.jsx\nimport React, { useState } from 'react';\nimport { useNavigate } from 'react-router-dom';\nimport { useAuth } from '../hooks/useAuth';\nimport '../styles/BookingPage.css';\n\nconst BookingPage = () => {\n    const { user, isAuthenticated } = useAuth();\n    const navigate = useNavigate();\n    const [guideId, setGuideId] = useState('');\n    const [bookingDate, setBookingDate] = useState('');\n    const [durationHours, setDurationHours] = useState(1);\n    const [isLoading, setIsLoading] = useState(false);\n    const [error, setError] = useState('');\n    const [success, setSuccess] = useState('');\n\n    if (!isAuthenticated) {\n        return (\n            <div className=\"booking-container\">\n                <div className=\"booking-card\">\n                    <h1>يجب تسجيل الدخول أولاً</h1>\n                    <p>لإنشاء حجز، يجب أن تكون مسجل دخول.</p>\n                    <button className=\"btn-primary\" onClick={() => navigate('/login')}>\n                        تسجيل الدخول\n                    </button>\n                </div>\n            </div>\n        );\n    }\n\n    const handleSubmit = async (e) => {\n        e.preventDefault();\n        setError('');\n        setSuccess('');\n        setIsLoading(true);\n\n        try {\n            // حساب السعر الإجمالي (مثال: 50 دينار في الساعة)\n            const totalPrice = durationHours * 50;\n\n            const response = await fetch('/api/v1/bookings', {\n                method: 'POST',\n                headers: {\n                    'Content-Type': 'application/json',\n                    'Authorization': `Bearer ${localStorage.getItem('token')}`\n                },\n                body: JSON.stringify({\n                    guideId,\n                    bookingDate,\n                    durationHours: parseFloat(durationHours),\n                    totalPrice\n                })\n            });\n\n            const data = await response.json();\n\n            if (!response.ok) {\n                throw new Error(data.msg || 'فشل إنشاء الحجز');\n            }\n\n            setSuccess('تم إنشاء الحجز بنجاح! يمكنك الآن المتابعة للدفع.');\n            setTimeout(() => navigate('/profile'), 2000);\n        } catch (err) {\n            setError(err.message);\n        } finally {\n            setIsLoading(false);\n        }\n    };\n\n    return (\n        <div className=\"booking-container\">\n            <div className=\"booking-card\">\n                <h1>حجز مرشد سياحي</h1>\n                <p className=\"booking-subtitle\">اختر المرشد والتاريخ والمدة المطلوبة</p>\n\n                {error && <div className=\"error-message\">{error}</div>}\n                {success && <div className=\"success-message\">{success}</div>}\n\n                <form onSubmit={handleSubmit}>\n                    <div className=\"form-group\">\n                        <label htmlFor=\"guideId\">اختر المرشد</label>\n                        <select\n                            id=\"guideId\"\n                            value={guideId}\n                            onChange={(e) => setGuideId(e.target.value)}\n                            required\n                        >\n                            <option value=\"\">-- اختر مرشد --</option>\n                            <option value=\"guide-1\">أحمد علي - مرشد معتمد</option>\n                            <option value=\"guide-2\">فاطمة محمد - مرشدة معتمدة</option>\n                            <option value=\"guide-3\">محمود حسن - مرشد معتمد</option>\n                        </select>\n                    </div>\n\n                    <div className=\"form-group\">\n                        <label htmlFor=\"bookingDate\">التاريخ والوقت</label>\n                        <input\n                            type=\"datetime-local\"\n                            id=\"bookingDate\"\n                            value={bookingDate}\n                            onChange={(e) => setBookingDate(e.target.value)}\n                            required\n                        />\n                    </div>\n\n                    <div className=\"form-group\">\n                        <label htmlFor=\"durationHours\">مدة الجولة (ساعات)</label>\n                        <input\n                            type=\"number\"\n                            id=\"durationHours\"\n                            value={durationHours}\n                            onChange={(e) => setDurationHours(e.target.value)}\n                            min=\"1\"\n                            step=\"0.5\"\n                            required\n                        />\n                    </div>\n\n                    <div className=\"price-summary\">\n                        <p>السعر الإجمالي: <strong>{durationHours * 50} دينار</strong></p>\n                    </div>\n\n                    <button type=\"submit\" className=\"btn-primary\" disabled={isLoading}>\n                        {isLoading ? 'جاري الحجز...' : 'حجز الآن'}\n                    </button>\n                </form>\n            </div>\n        </div>\n    );\n};\n\nexport default BookingPage;\n
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
+import useBookingForm from '../hooks/useBookingForm';
+import { motion, AnimatePresence } from 'framer-motion';
+import Header from '../components/Header';
+import '../styles/BookingPage.css';
+
+// استيراد مكونات الخطوات (سيتم إنشاؤها في المرحلة التالية)
+import ServiceSelection from '../components/booking/ServiceSelection';
+import DetailsForm from '../components/booking/DetailsForm';
+import SummaryStep from '../components/booking/SummaryStep';
+
+const BookingPage = () => {
+    const { isAuthenticated } = useAuth();
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const [apiError, setApiError] = useState('');
+    const [success, setSuccess] = useState('');
+
+    // استخدام الخطاف المخصص لإدارة حالة النموذج
+    const {
+        currentStep,
+        formData,
+        errors,
+        totalSteps,
+        nextStep,
+        prevStep,
+        resetForm,
+        handleChange,
+        setErrors
+    } = useBookingForm();
+
+    if (!isAuthenticated) {
+        return (
+            <div className="booking-container">
+                <div className="booking-card">
+                    <h1>يجب تسجيل الدخول أولاً</h1>
+                    <p>لإنشاء حجز، يجب أن تكون مسجل دخول.</p>
+                    <button className="btn-primary" onClick={() => navigate('/login')}>
+                        تسجيل الدخول
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setApiError('');
+        setSuccess('');
+        setIsLoading(true);
+
+        try {
+            const response = await fetch('/api/v1/bookings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    guideId: formData.guideId,
+                    bookingDate: formData.bookingDate,
+                    durationHours: parseFloat(formData.durationHours),
+                    totalPrice: formData.totalPrice
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                // استخدام setErrors لتحديث أخطاء النموذج
+                if (response.status === 400 && data.errors) {
+                    const formErrors = {};
+                    data.errors.forEach(err => {
+                        formErrors[err.path[0]] = err.message;
+                    });
+                    setErrors(formErrors);
+                }
+                throw new Error(data.msg || 'فشل إنشاء الحجز');
+            }
+
+            setSuccess('تم إنشاء الحجز بنجاح! يمكنك الآن المتابعة للدفع.');
+            resetForm(); // إعادة تعيين النموذج بعد النجاح
+            setTimeout(() => navigate('/profile'), 3000);
+        } catch (err) {
+            setApiError(err.message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // دالة لعرض المكون الحالي بناءً على الخطوة
+    const renderStep = () => {
+        switch (currentStep) {
+            case 1:
+                return <ServiceSelection formData={formData} handleChange={handleChange} errors={errors} />;
+            case 2:
+                return <DetailsForm formData={formData} handleChange={handleChange} errors={errors} />;
+            case 3:
+                return <SummaryStep formData={formData} />;
+            default:
+                return null;
+        }
+    };
+
+    // متغيرات framer-motion للانتقال بين الخطوات
+    const stepVariants = {
+        initial: { opacity: 0, x: 100 },
+        in: { opacity: 1, x: 0 },
+        out: { opacity: 0, x: -100 }
+    };
+
+    return (
+        <div className="booking-container">
+            <Header />
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="booking-card"
+            >
+                <h1>حجز خدمة سياحية</h1>
+                <p className="booking-subtitle">خطوة {currentStep} من {totalSteps}: {currentStep === 1 ? 'اختيار الخدمة' : currentStep === 2 ? 'التفاصيل والوقت' : 'الملخص والدفع'}</p>
+
+                {/* شريط التقدم */}
+                <div className="progress-bar">
+                    <motion.div
+                        className="progress-fill"
+                        initial={{ width: '0%' }}
+                        animate={{ width: `${(currentStep / totalSteps) * 100}%` }}
+                        transition={{ duration: 0.5 }}
+                    />
+                </div>
+
+                {apiError && <div className="error-message">{apiError}</div>}
+                {success && <div className="success-message">{success}</div>}
+
+                <form onSubmit={currentStep === totalSteps ? handleSubmit : (e) => e.preventDefault()}>
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={currentStep}
+                            variants={stepVariants}
+                            initial="initial"
+                            animate="in"
+                            exit="out"
+                            transition={{ type: 'tween', duration: 0.3 }}
+                            className="step-content"
+                        >
+                            {renderStep()}
+                        </motion.div>
+                    </AnimatePresence>
+
+                    <div className="form-actions">
+                        {currentStep > 1 && (
+                            <motion.button
+                                type="button"
+                                className="btn-secondary"
+                                onClick={prevStep}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                &larr; السابق
+                            </motion.button>
+                        )}
+
+                        {currentStep < totalSteps && (
+                            <motion.button
+                                type="button"
+                                className="btn-primary"
+                                onClick={nextStep}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                التالي &rarr;
+                            </motion.button>
+                        )}
+
+                        {currentStep === totalSteps && (
+                            <motion.button
+                                type="submit"
+                                className="btn-primary"
+                                disabled={isLoading}
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                {isLoading ? 'جاري تأكيد الحجز...' : 'تأكيد الحجز والدفع'}
+                            </motion.button>
+                        )}
+                    </div>
+                </form>
+            </motion.div>
+        </div>
+    );
+};
+
+export default BookingPage;
