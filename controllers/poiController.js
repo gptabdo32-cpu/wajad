@@ -4,21 +4,21 @@ const ErrorResponse = require('../utils/ErrorResponse');
 const gisService = require('../services/gisService');
 
 // @desc    جلب جميع نقاط الاهتمام
-// @route   GET /api/v1/poi
+// @route   GET /api/v1/poi/all
 // @access  عام
-exports.getPois = async (req, res, next) => {
+exports.getAllPois = async (req, res, next) => {
     try {
         const { data: pois, error } = await supabase
             .from('pois')
             .select('*');
 
         if (error) {
-            return next(new ErrorResponse('فشل في جلب نقاط الاهتمام.', 500));
+            return next(new ErrorResponse('فشل في جلب جميع نقاط الاهتمام.', 500));
         }
 
         res.status(200).json({ success: true, count: pois.length, data: pois });
     } catch (error) {
-        res.status(500).json({ success: false, error: 'حدث خطأ غير متوقع.' });
+        next(new ErrorResponse('حدث خطأ غير متوقع أثناء جلب جميع نقاط الاهتمام.', 500));
     }
 };
 
@@ -69,9 +69,9 @@ exports.createPoi = async (req, res, next) => {
 // @access  عام
 exports.searchPois = async (req, res, next) => {
     try {
-        const { query, category } = req.query;
+        const { q, category } = req.query; // تغيير 'query' إلى 'q' ليتناسب مع الواجهة الأمامية
 
-        const result = await gisService.searchPOI(query, category);
+        const result = await gisService.searchPOI(q, category);
 
         if (result.success) {
             res.status(200).json(result);

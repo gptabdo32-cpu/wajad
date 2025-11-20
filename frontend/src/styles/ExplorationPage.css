@@ -1,0 +1,174 @@
+/* wajad/frontend/src/styles/ExplorationPage.css */
+
+.exploration-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f4f7f6;
+}
+
+.exploration-content {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.exploration-content h1 {
+    color: #004d40; /* لون أخضر داكن */
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+}
+
+.exploration-content .subtitle {
+    color: #555;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+}
+
+/* شريط البحث */
+.search-bar-container {
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid #e0e0e0;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: border-color 0.3s, box-shadow 0.3s;
+    text-align: right; /* محاذاة النص لليمين */
+}
+
+.search-input:focus {
+    border-color: #00796b;
+    box-shadow: 0 4px 15px rgba(0, 121, 107, 0.1);
+    outline: none;
+}
+
+.loading-spinner {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #00796b;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: translateY(-50%) rotate(0deg); }
+    100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* قائمة النتائج */
+.poi-results-container {
+    min-height: 300px;
+}
+
+.poi-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.poi-item {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.poi-icon {
+    font-size: 2rem;
+    margin-left: 15px;
+}
+
+.poi-info {
+    flex-grow: 1;
+}
+
+.poi-info h3 {
+    margin: 0 0 5px 0;
+    color: #333;
+    font-size: 1.3rem;
+}
+
+.poi-info p {
+    margin: 0 0 5px 0;
+    color: #777;
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.poi-rating {
+    color: #f39c12;
+    font-weight: bold;
+}
+
+.btn-view-map {
+    background-color: #00796b;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 0.9rem;
+    margin-right: 10px;
+}
+
+.btn-view-map:hover {
+    background-color: #004d40;
+}
+
+.no-results, .error-message {
+    text-align: center;
+    padding: 50px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    color: #e74c3c;
+    font-size: 1.2rem;
+}
+
+.no-results p {
+    color: #555;
+}
+
+/* استجابة الشاشات الصغيرة */
+@media (max-width: 768px) {
+    .exploration-content {
+        padding: 10px;
+    }
+
+    .exploration-content h1 {
+        font-size: 2rem;
+    }
+
+    .poi-list {
+        grid-template-columns: 1fr;
+    }
+
+    .poi-item {
+        flex-direction: row-reverse;
+        justify-content: space-between;
+    }
+
+    .poi-icon {
+        margin-left: 0;
+        margin-right: 15px;
+    }
+}

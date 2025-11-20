@@ -1,7 +1,7 @@
 // routes/poi.js
 const express = require("express");
 const {
-  getPois,
+  getAllPois, // تم تغيير الاسم
   getPoisInRadius,
   createPoi,
   searchPois,
@@ -13,7 +13,7 @@ const { createPOISchema } = require('../validation/poiValidation');
 const router = express.Router();
 
 // المسارات العامة
-router.route("/").get(getPois);
+router.route("/all").get(getAllPois); // المسار الجديد لجلب الكل
 router.route("/search").get(searchPois);
 router.route("/radius/:distance/:lat/:lng").get(getPoisInRadius);
 
