@@ -34,8 +34,8 @@ export const AuthProvider = ({ children }) => {
                 throw new Error(data.error || 'فشل التسجيل');
             }
 
+            // لا نستخدم localStorage بعد الآن
             setUser(data.user);
-            localStorage.setItem('user', JSON.stringify(data.user));
             return data;
         } catch (err) {
             setError(err.message);
@@ -62,9 +62,8 @@ export const AuthProvider = ({ children }) => {
                 throw new Error(data.error || 'فشل تسجيل الدخول');
             }
 
+            // لا نستخدم localStorage بعد الآن. يتم تخزين الرموز في كوكيز HTTP-Only
             setUser(data.user);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            localStorage.setItem('token', data.session.access_token);
             return data;
         } catch (err) {
             setError(err.message);
@@ -79,10 +78,13 @@ export const AuthProvider = ({ children }) => {
         setLoading(true);
         setError(null);
         try {
-            await fetch('/api/v1/auth/logout', { method: 'GET' });
+            // يجب أن نرسل الكوكيز مع الطلب
+            await fetch('/api/v1/auth/logout', { 
+                method: 'GET',
+                credentials: 'include' // لإرسال الكوكيز
+            });
             setUser(null);
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
+            // لا نستخدم localStorage بعد الآن
         } catch (err) {
             setError(err.message);
         } finally {
@@ -90,11 +92,27 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // استعادة جلسة المستخدم من localStorage
-    const restoreSession = () => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
+    // استعادة جلسة المستخدم (تعتمد على التحقق من صحة الكوكيز في الخادم)
+    // في تطبيق حقيقي، يجب أن يكون هناك مسار /api/v1/auth/me للتحقق من الجلسة
+    const restoreSession = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch('/api/v1/auth/me', {
+                method: 'GET',
+                credentials: 'include' // لإرسال الكوكيز
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setUser(data.profile);
+            } else {
+                setUser(null);
+            }
+        } catch (err) {
+            console.error("Failed to restore session:", err);
+            setUser(null);
+        } finally {
+            setLoading(false);
         }
     };
 

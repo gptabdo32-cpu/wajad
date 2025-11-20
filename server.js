@@ -1,5 +1,7 @@
 // server.js
 const express = require('express');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
 const config = require('./config/config');
@@ -13,8 +15,15 @@ const app = express();
 app.set('supabase', supabase);
 
 // 3. إعداد Middlewares الأساسية
+// تكوين CORS للسماح بتبادل الكوكيز
+app.use(cors({
+    origin: ['http://localhost:5173', 'http://localhost:3000'], // يجب تحديث هذا في الإنتاج
+    credentials: true,
+}));
+
 app.use(helmet()); // إضافة رؤوس أمان HTTP
 app.use(express.json()); // لتحليل طلبات JSON
+app.use(cookieParser()); // لتحليل الكوكيز
 app.use(express.urlencoded({ extended: true })); // لتحليل طلبات URL-encoded
 
 // 4. إعداد المسارات (Routes)

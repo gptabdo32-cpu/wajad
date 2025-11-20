@@ -25,6 +25,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.42.5",
     "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "helmet": "^8.1.0",
