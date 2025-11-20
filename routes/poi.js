@@ -5,6 +5,7 @@ const {
   getPoisInRadius,
   createPoi,
   searchPois,
+  getAccommodation, // إضافة المسار الجديد
 } = require("../controllers/poiController");
 const { protect, authorize } = require("../middleware/auth");
 const validationMiddleware = require('../middleware/validationMiddleware');
@@ -16,6 +17,7 @@ const router = express.Router();
 router.route("/all").get(getAllPois); // المسار الجديد لجلب الكل
 router.route("/search").get(searchPois);
 router.route("/radius/:distance/:lat/:lng").get(getPoisInRadius);
+router.route("/accommodation").get(getAccommodation); // المسار الجديد لجلب الإقامة
 
 // المسارات الخاصة (تتطلب مصادقة)
 router

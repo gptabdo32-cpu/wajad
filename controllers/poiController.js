@@ -82,3 +82,40 @@ exports.searchPois = async (req, res, next) => {
         next(error);
     }
 };
+
+// @desc    جلب عروض الإقامة مع التصفية المتقدمة
+// @route   GET /api/v1/poi/accommodation
+// @access  عام
+exports.getAccommodation = async (req, res, next) => {
+    try {
+        const { minPrice, maxPrice, rating, guests, checkIn, checkOut } = req.query;
+
+        // سنفترض أن gisService.getAccommodationFilter موجودة وتتعامل مع منطق التصفية
+        // في الوقت الحالي، سنقوم فقط بتصفية بسيطة على الفئة 'Accommodation'
+        let queryBuilder = supabase
+            .from('pois')
+            .select('*')
+            .eq('category', 'Accommodation');
+
+        if (minPrice) {
+            queryBuilder = queryBuilder.gte('price', minPrice);
+        }
+        if (maxPrice) {
+            queryBuilder = queryBuilder.lte('price', maxPrice);
+        }
+        if (rating) {
+            queryBuilder = queryBuilder.gte('rating', rating);
+        }
+        // يمكن إضافة منطق معقد للضيوف والتواريخ هنا
+
+        const { data: accommodation, error } = await queryBuilder;
+
+        if (error) {
+            return next(new ErrorResponse('فشل في جلب عروض الإقامة.', 500));
+        }
+
+        res.status(200).json({ success: true, count: accommodation.length, data: accommodation });
+    } catch (error) {
+        next(new ErrorResponse('حدث خطأ غير متوقع أثناء جلب عروض الإقامة.', 500));
+    }
+};
