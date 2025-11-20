@@ -9,6 +9,7 @@ const supabase = require('./config/supabase');
 
 /// 2. إعداد تطبيق Express
 const app = express();
+const errorHandler = require('./middleware/errorMiddleware');
 
 // 1. إعداد عميل Supabase
 // يمكن استخدام هذا العميل في المسارات ووحدات التحكم للوصول إلى Supabase
@@ -58,7 +59,10 @@ app.use('/api/v1/bookings', bookingRoutes);
 // ربط مسارات الدفع (Payments)
 app.use('/api/v1/payments', paymentRoutes);
 
-// 5. تقديم الملفات الثابتة (الواجهة الأمامية)
+// 5. وسيط معالجة الأخطاء (يجب أن يكون بعد جميع المسارات)
+app.use(errorHandler);
+
+// 6. تقديم الملفات الثابتة (الواجهة الأمامية)
 // بما أننا نستخدم React/Vite، فإن الخادم الخلفي لا يقدم الواجهة الأمامية بشكل مباشر.
 // يجب أن يتم تقديم الواجهة الأمامية عبر خادم Vite للتطوير أو عبر خادم ثابت للإنتاج.
 // تم حذف المسارات القديمة التي كانت تشير إلى ملفات HTML/CSS/JS في جذر المشروع.

@@ -7,6 +7,8 @@ const {
   searchPois,
 } = require("../controllers/poiController");
 const { protect, authorize } = require("../middleware/auth");
+const validationMiddleware = require('../middleware/validationMiddleware');
+const { createPOISchema } = require('../validation/poiValidation');
 
 const router = express.Router();
 
@@ -18,6 +20,6 @@ router.route("/radius/:distance/:lat/:lng").get(getPoisInRadius);
 // المسارات الخاصة (تتطلب مصادقة)
 router
   .route("/")
-  .post(protect, authorize("admin", "guide"), createPoi);
+  .post(protect, authorize("admin", "guide"), validationMiddleware(createPOISchema), createPoi);
 
 module.exports = router;
